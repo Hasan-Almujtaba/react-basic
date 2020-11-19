@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Form from "./Form";
+import Table from "./Table";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    lists: [
+      {
+        title: "Gosic",
+        year: "2012",
+      },
+      {
+        title: "Bible black",
+        year: "2001",
+      },
+      {
+        title: "Otome Dori",
+        year: "2013",
+      },
+    ],
+  };
+
+  remove = (index) => {
+    const { lists } = this.state;
+
+    this.setState({
+      lists: lists.filter((list, i) => {
+        return i !== index;
+      }),
+    });
+  };
+
+  handleSubmit = (list) => {
+    this.setState({ lists: [...this.state.lists, list] });
+  };
+
+  render() {
+    const { lists } = this.state;
+
+    return (
+      <div className="container">
+        <h1>React Basic</h1>
+        <p>add new anime list to table</p>
+        <Table tableData={lists} remove={this.remove} />
+        <Form handleSubmit={this.handleSubmit} />
+      </div>
+    );
+  }
 }
 
 export default App;
