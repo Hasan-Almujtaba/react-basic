@@ -1,52 +1,44 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Form from "./Form";
 import Table from "./Table";
 
-class App extends Component {
-  state = {
-    lists: [
-      {
-        title: "Gosic",
-        year: "2012",
-      },
-      {
-        title: "Bible black",
-        year: "2001",
-      },
-      {
-        title: "Otome Dori",
-        year: "2013",
-      },
-    ],
-  };
+export default function App() {
+  const [lists, setLists] = useState([]);
+  const [list, setList] = useState({});
 
-  remove = (index) => {
-    const { lists } = this.state;
-
-    this.setState({
-      lists: lists.filter((list, i) => {
-        return i !== index;
-      }),
+  const remove = (index) => {
+    const updatedList = lists.filter((list, i) => {
+      return i !== index;
     });
+
+    setLists(updatedList);
   };
 
-  handleSubmit = (list) => {
-    this.setState({ lists: [...this.state.lists, list] });
+  const detail = (index) => {
+    const data = lists[index];
+    data.id = index;
+    setList(data);
   };
 
-  render() {
-    const { lists } = this.state;
+  const handleSubmit = (list) => {
+    if (list.id !== null) {
+      const newLists = lists;
+      newLists[list.id] = list;
 
-    return (
-      <div className="container">
-        <h1>React Basic</h1>
-        <p>add new anime list to table</p>
-        <Table tableData={lists} remove={this.remove} />
-        <Form handleSubmit={this.handleSubmit} />
-      </div>
-    );
-  }
+      setLists(newLists);
+      setList({});
+    } else {
+      setLists(lists.concat(list));
+    }
+  };
+
+  return (
+    <div className="container">
+      <h1>React Basic</h1>
+      <p>add new anime list to table</p>
+      <Table tableData={lists} remove={remove} detail={detail} />
+      <Form handleSubmit={handleSubmit} list={list} />
+    </div>
+  );
 }
-
-export default App;

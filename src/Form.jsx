@@ -1,51 +1,54 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-export default class Form extends Component {
-  initialState = {
+export default function Form({ handleSubmit, list }) {
+  const initialForm = {
+    id: null,
     title: "",
     year: "",
   };
 
-  state = this.initialState;
+  const [form, setForm] = useState(initialForm);
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
+  useEffect(() => {
+    if (Object.keys(list).length !== 0) {
+      setForm(list);
+    }
+  }, [list]);
 
-    this.setState({
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    setForm({
+      ...form,
       [name]: value,
     });
-  };
-
-  submitForm = () => {
-    this.props.handleSubmit(this.state);
-    this.setState(this.initialState);
-  };
-
-  render() {
-    const { title, year } = this.state;
-
-    return (
-      <form>
-        <label htmlFor="title">title</label>
-        <input
-          type="text"
-          name="title"
-          id="name"
-          value={title}
-          onChange={this.handleChange}
-        />
-        <label htmlFor="year">year</label>
-        <input
-          type="text"
-          name="year"
-          id="year"
-          value={year}
-          onChange={this.handleChange}
-        />
-        <button type="button" onClick={this.submitForm}>
-          submit
-        </button>
-      </form>
-    );
   }
+
+  function submitForm(e) {
+    e.preventDefault();
+    handleSubmit(form);
+    setForm(initialForm);
+  }
+
+  return (
+    <form onSubmit={submitForm}>
+      <label htmlFor="title">title</label>
+      <input
+        type="text"
+        name="title"
+        id="name"
+        onChange={handleChange}
+        value={form.title}
+      />
+      <label htmlFor="year">year</label>
+      <input
+        type="number"
+        name="year"
+        id="year"
+        onChange={handleChange}
+        value={form.year}
+      />
+      <button type="submit">submit</button>
+    </form>
+  );
 }
