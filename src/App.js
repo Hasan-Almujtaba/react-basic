@@ -23,7 +23,7 @@ export default function App() {
 
   const handleSubmit = (list) => {
     if (list.id !== null) {
-      const newLists = lists;
+      const newLists = [...lists];
       newLists[list.id] = list;
 
       setLists(newLists);

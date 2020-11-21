@@ -42,7 +42,7 @@ export default function Form({ handleSubmit, list }) {
       />
       <label htmlFor="year">year</label>
       <input
-        type="number"
+        type="date"
         name="year"
         id="year"
         onChange={handleChange}
